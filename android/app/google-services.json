@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "891306650978",
+    "project_id": "claimassistant-45a0c",
+    "storage_bucket": "claimassistant-45a0c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:891306650978:android:7df0d47704928cb6e7103b",
+        "android_client_info": {
+          "package_name": "com.sadam.sadam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "891306650978-ba5j80piubn3vv9s82fkhhv475916si5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sadam.sadam",
+            "certificate_hash": "9c073caf26bd7a26804e403a209232bf9e598a47"
+          }
+        },
+        {
+          "client_id": "891306650978-b3nk8av886a3p5skeg2542g9cqdtcipg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBOGhooA3OAC4_yBg7G18L_pPu-opZUfk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "891306650978-b3nk8av886a3p5skeg2542g9cqdtcipg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "891306650978-8f2fa3highiob5kh52tr8b93knbp91m7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sadam.sadam"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
