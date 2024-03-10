@@ -93,8 +93,8 @@ class AccidentList extends StatelessWidget {
                                   // SizedBox(width: size.width*0.48,),
                                   IconButton(
                                     onPressed: () {
-                                      navi n = navi(context: context, moveWidget: accidentDetail(여기다 이름 회원코드 넣어야함));
-                                      n.changeView();
+                                      // navi n = navi(context: context, moveWidget: accidentDetail(여기다 이름 회원코드 넣어야함));
+                                      // n.changeView();
                                       },
                                     icon: Image.asset('assets/arrow-down.png'),
                                   )
