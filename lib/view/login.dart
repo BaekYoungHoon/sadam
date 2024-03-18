@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:sadam/controller/controller.dart';
 import 'package:sadam/view/add_sponser.dart';
 import 'package:sadam/login/social_login.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sadam/login/apple_login.dart';
 
 class login extends StatelessWidget {
   const login({super.key});
@@ -63,6 +65,8 @@ class login extends StatelessWidget {
               SignInWithAppleButton(
 
                 onPressed: () async {
+                  FirebaseAppleLogin a = FirebaseAppleLogin();
+                  // a.loginWithApple();
                   final appleCredential = await SignInWithApple.getAppleIDCredential(
                     scopes: [
                       AppleIDAuthorizationScopes.email,
@@ -79,6 +83,12 @@ class login extends StatelessWidget {
                   // Firebase에 사용자 로그인
                   await FirebaseAuth.instance.signInWithCredential(credential);
 
+                  uidController.text = await FirebaseAuth.instance.currentUser?.uid.toString() ?? "";
+
+
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                          builder: (context) => Sponser()));
                   // 로그인 성공 후 처리
                   print('Apple 로그인 성공: ${FirebaseAuth.instance.currentUser?.uid}');
                 },
