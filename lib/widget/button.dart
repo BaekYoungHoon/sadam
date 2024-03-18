@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sadam/navi/change_view.dart';
+import 'package:sadam/provider/accidentList.dart';
 import 'package:sadam/provider/ex.dart';
 import 'package:provider/provider.dart';
 import 'package:sadam/controller/controller.dart';
@@ -23,7 +24,7 @@ Widget button1(double width, double height, double radius, String text, Color co
             na.changeView();
           },
           child: Container(
-            width: 302,
+            width: 301,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -91,6 +92,7 @@ Widget button2(double w, double h, String t, Widget widget,BuildContext context,
 
 Widget button3(double width, double height, double radius, String text, Color color, BuildContext context){
   DropdownProvider dropdown = Provider.of<DropdownProvider>(context);
+  GetAccidentData list = Provider.of<GetAccidentData>(context);
   return SizedBox(
       width: width,
       height: height,
@@ -107,6 +109,8 @@ Widget button3(double width, double height, double radius, String text, Color co
             Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => AccidentList())
             );
+            list.fetchAccidentDetail(uidController.text);
+            list.fetchAccidentList(uidController.text);
             dropdown.selectedAccidentType = null;
             dropdown.selectedInsuranceCoverageType = null;
             dropdown.selectedAccidentSite = null;

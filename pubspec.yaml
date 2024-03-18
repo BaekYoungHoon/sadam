@@ -33,13 +33,17 @@ dependencies:
 
   provider: ^6.1.1
 
+  intl: ^0.19.0
+
   font_awesome_flutter: ^10.7.0
+  fluttertoast: ^8.2.4
 
   firebase_core: ^2.25.3
   firebase_auth: ^4.17.3
   cloud_firestore: ^4.15.4
-  google_sign_in: ^6.2.1
 
+  google_sign_in: ^6.2.1
+  kakao_flutter_sdk: ^1.9.0
   sign_in_with_apple: ^6.0.0
 
   smooth_page_indicator: ^1.1.0

@@ -33,6 +33,10 @@ class AccidentDetail {
     }
   }
 
+  void getAccidentDetail(List<List<String>> list) async{
+
+  }
+
   void addAccident(String Atype, String Ctype, String Stype,
        String description, String question)async{
     await db.collection("users").doc(uidController.text).collection("myAccident").doc().set({

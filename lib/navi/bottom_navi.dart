@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:sadam/controller/controller.dart';
 import 'package:sadam/navi/change_view.dart';
 import 'package:sadam/view/my_accident_list.dart';
+import 'package:sadam/data/get_accident.dart';
+import 'package:sadam/provider/accidentList.dart';
+import 'package:provider/provider.dart';
 
 Widget BottomNavi(BuildContext context){
   Size size = MediaQuery.of(context).size;
+  GetAccidentData b = Provider.of<GetAccidentData>(context);
   return Container(
     color: Color(0xff1B1B1B),
     height: size.height*0.12,
@@ -35,6 +40,8 @@ Widget BottomNavi(BuildContext context){
             onPressed: (){
               navi a = navi(context: context, moveWidget: AccidentList());
               a.changeView();
+              b.fetchAccidentDetail(uidController.text);
+              b.fetchAccidentList(uidController.text);
             },
             child: Text(
               "나의 알림사고\n확인하기",

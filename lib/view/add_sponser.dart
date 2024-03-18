@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:sadam/data/colors.dart';
+import 'package:sadam/data/get_memberid.dart';
 import 'package:sadam/widget/button.dart';
 import 'package:sadam/view/home.dart';
 import 'package:sadam/data/colors.dart';
 import 'package:sadam/controller/controller.dart';
 import 'package:sadam/login/social_login.dart';//임시
+import 'package:sadam/data/user_data.dart';
 
 class Sponser extends StatelessWidget {
   const Sponser({super.key});
@@ -26,7 +28,7 @@ class Sponser extends StatelessWidget {
             ),
             SizedBox(height: 8,),
             TextField(
-              controller: sponsoController,
+              controller: sponsorController,
               decoration: InputDecoration(
                 filled: true,
                 fillColor: mainGray,
@@ -54,8 +56,8 @@ class Sponser extends StatelessWidget {
                   child: MaterialButton(
                     color: Color(0xff73020C),
                     onPressed: () {
-                      if(sponsoController.text.isEmpty){
-                        print(sponsoController.text);
+                      if(sponsorController.text.isEmpty){
+                        print(sponsorController.text);
                       }
                       else{
                         Navigator.of(context).pushReplacement(
@@ -64,6 +66,8 @@ class Sponser extends StatelessWidget {
                                 settings: RouteSettings(name: '/')
                             )
                         );
+                        UsersData data = UsersData(loginType: "구글", userName: userNameController.text);
+                        data.addSponsor(uidController.text);
                       }
                     },
                     child: Container(

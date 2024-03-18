@@ -11,8 +11,20 @@ import 'package:sadam/view/add_accident.dart';
 import 'package:sadam/navi/bottom_navi.dart';
 import 'package:sadam/view/faq.dart';
 import 'package:sadam/view/accountNumber.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class home extends StatelessWidget {
+  Future<void> _logout(BuildContext context) async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      // 로그아웃 후 필요한 작업을 수행할 수 있습니다.
+      Navigator.of(context).popUntil((route) => route.isFirst);
+      print(uidController.text);
+    } catch (e) {
+      print('Error logging out: $e');
+      // 로그아웃 중에 오류가 발생한 경우 오류를 처리할 수 있습니다.
+    }
+  }
   //const home({super.key});
   List<String> image = ["assets/info1.png", "assets/info2.png", "assets/info3.png"];
   @override
@@ -48,7 +60,21 @@ class home extends StatelessWidget {
             list("사고알림 상담글 등록", context, addFeed(), 'nanumRegular', 16, FontWeight.w400),
             list("나의 알림사고 확인하기", context, AccidentList(), 'nanumRegular', 16, FontWeight.w400),
             list("FAQ", context, FAQ(), 'nanumRegular', 16, FontWeight.w400),
-            list("전화 상담 하기", context, home(), 'nanumRegular', 16, FontWeight.w400)
+            list("전화 상담 하기", context, home(), 'nanumRegular', 16, FontWeight.w400),
+            ListTile(
+              title: Text(
+                "로그아웃",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'nanumRegular',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400
+                ),
+              ),
+              onTap: (){
+                _logout(context);
+              },
+            )
           ],
         ),
       ),

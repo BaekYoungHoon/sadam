@@ -14,7 +14,7 @@ class AccidentDetailP with ChangeNotifier{
 
   void addWidget(Widget widget) {
     widgets.add(widget);
-    notifyListeners(); // 변경 알림
+    notifyListeners();
   }
 
 }

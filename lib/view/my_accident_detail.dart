@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 import 'package:sadam/controller/controller.dart';
 import 'package:sadam/navi/bottom_navi.dart';
+import 'package:sadam/provider/accidentList.dart';
 import 'package:sadam/widget/button.dart';
 import 'package:sadam/widget/text.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,23 +10,29 @@ import 'package:sadam/data/colors.dart';
 import 'package:sadam/view/home.dart';
 import 'package:sadam/view/accountNumber.dart';
 import 'package:sadam/provider/accident_detail.dart';
+import 'package:sadam/provider/reple_list.dart';
+import 'package:sadam/data/reple.dart';
 
 class accidentDetail extends StatelessWidget {
   String name = "";
   String id = "";
   String sponsor = "";
   String sponsorId = "";
+  int index = 0;
   accidentDetail({
     required this.name,
     required this.id,
     required this.sponsor,
-    required this.sponsorId
+    required this.sponsorId,
+    required this.index
 });
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    Reple reple = Provider.of<Reple>(context);
     AccidentDetailP widget = Provider.of<AccidentDetailP>(context);
+    GetAccidentData list = Provider.of<GetAccidentData>(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -55,9 +62,9 @@ class accidentDetail extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              row("회원 성명", "홍길동", "회원 번호", "A0001", context),
-              row("소개 회원", "김춘배", "회원 번호", "A0002", context),
-              row("사고 종류", "화재 사고", "보험 담보 종류", "진단비", context),
+              row("회원 성명", name, "회원 번호", id, context),
+              row("소개 회원", sponsor, "회원 번호", sponsorId, context),
+              row("사고 종류", list.detailAccidentType, "보험 담보 종류", list.detailCoverage, context),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -72,7 +79,7 @@ class accidentDetail extends StatelessWidget {
                       color: mainGray
                     ),
                     child: Text(
-                      '부산',
+                      list.detailSite,
                       style: TextStyle(
                         fontFamily: 'nanumRegular',
                         fontWeight: FontWeight.w400,
@@ -93,7 +100,7 @@ class accidentDetail extends StatelessWidget {
                         color: mainGray
                     ),
                     child: Text(
-                      '질문 내용 6줄 까지 나옴',
+                      list.detailQuestion,
                       style: TextStyle(
                           fontFamily: 'nanumRegular',
                           fontWeight: FontWeight.w400,
@@ -219,54 +226,9 @@ class accidentDetail extends StatelessWidget {
                               child: MaterialButton(
                                 color: mainBlack,
                                 onPressed: () {
-                                  widget.addWidget(
-                                    Container(
-                                      width: size.width*0.893,
-                                      child: Column(
-                                        children: [
-                                          SizedBox(height: 20,),
-                                          Container(
-                                            child: Row(
-                                              children: [
-                                                Column(
-                                                  children: [
-                                                    Container(
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(60),
-                                                        color: mainGray
-                                                      ),
-                                                      width: size.width*0.16,
-                                                      height: size.height*0.074,
-                                                    ),
-                                                    Text(
-                                                      "홍길동"
-                                                    ),
-                                                  ],
-                                                ),
-                                                Container(
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.all(10),
-                                                    child: Text(
-                                                      "Adsf"
-                                                    ),
-                                                  ),
-                                                  height: 85,
-                                                  width: size.width*0.68,
-                                                  margin: EdgeInsets.all(20),
-                                                  alignment: Alignment.topLeft,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(10),
-                                                    color: mainGray
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  );
-                                  print(widget.widgets);
+                                  reple.setReple(index, commentController.text);
+                                  // reple.addReple(commentController.text);
+                                  commentController.text = '';
                                 },
                                 child: Container(
                                   width: size.width*0.106,
@@ -292,16 +254,16 @@ class accidentDetail extends StatelessWidget {
                   )
                 ],
               ),
-              SizedBox(height: 20),
-              SizedBox(height: 20),
-              Consumer<AccidentDetailP>(
-                builder: (context, widgetModel, _) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: widgetModel.widgets,
-                  );
-                },
-              ),
+              SizedBox(height: 10),
+              reple.repleList(userNameController.text, commentController.text, context)
+              // Consumer<AccidentDetailP>(
+              //   builder: (context, widgetModel, _) {
+              //     return Column(
+              //       crossAxisAlignment: CrossAxisAlignment.stretch,
+              //       children: widgetModel.widgets,
+              //     );
+              //   },
+              // ),
             ],
           ),
         ),

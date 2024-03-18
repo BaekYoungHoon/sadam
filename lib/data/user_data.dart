@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-final FirebaseFirestore db = FirebaseFirestore.instance;
+import 'package:sadam/controller/controller.dart';
+import 'package:sadam/data/get_memberid.dart';
+import 'package:sadam/view/accountNumber.dart';
+import 'package:sadam/data/get_currentuser.dart';
 
 Widget UserData(String t, String field, BuildContext context){
   Size size = MediaQuery.of(context).size;
@@ -39,7 +42,7 @@ Widget UserData(String t, String field, BuildContext context){
   );
 }
 
-class addUser {
+class UsersData {
   String? userName;
   String? userId;
   String? sponsorName;
@@ -52,24 +55,40 @@ class addUser {
   final FirebaseFirestore db = FirebaseFirestore.instance;
 
 
-  addUser({required this.userName, required this.loginType});
+  UsersData({required this.userName, required this.loginType});
+  // UsersData.namedConstructor();
 
   void addUsers(String? uid) async {
     final querySnapshot = await FirebaseFirestore.instance.collection('users').get();
 
 
-    db.collection('users').doc(uid).set({
+    await db.collection('users').doc(uid).set({
       'UserName': userName ?? "",
-      'UserId': userId ?? "",
-      'SponorName': sponsorName ?? "",
+      'UserId': await addMember(uid),
+      'SponsorName': sponsorName ?? "",
       'SponsorId': sponsorId ?? "",
       'PhoneNumber': phoneNumber ?? "",
       'AccountNumber': acountNumber ?? "",
-      'LoginType' : loginType ?? ""
+      'LoginType' : loginType ?? "",
+      "Bank" : "",
+      "BankOwner" : ""
+    });
+  }
+  
+  void addSponsor(String? uid) async{
+    db.collection("users").doc(uid).update({
+      "SponsorName" : sponsorController.text,
+      "SponsorId" : await getSponsorId(sponsorController.text)
     });
   }
 
-  void UpdateUsers() async{
-    db.collection("collectionPath");
+  void AccountUpdate(String? uid) async{
+    db.collection("users").doc(uid).update({
+      "Bank" : bankNameController.text,
+      "BankOwner" : accountOwnerController.text,
+      "AccountNumber" : accountController.text,
+      "PhoneNumber" : phoneNumberController.text,
+    });
   }
 }
+
