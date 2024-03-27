@@ -22,7 +22,6 @@ class GetAccident {
     }
     return documentsList;
   }
-
   Future<List<List<dynamic>>> getAccidentDetail(String uid) async {
     List<List<dynamic>> allDocumentFields = [];
 
@@ -34,23 +33,54 @@ class GetAccident {
         .orderBy('timeStamp', descending: true)
         .get();
 
-    // 컬렉션의 각 도큐먼트에서 전체 필드 값을 가져와서 리스트에 추가
+    // 컬렉션의 각 도큐먼트에서 필드 값을 가져와서 리스트에 추가
     querySnapshot.docs.forEach((doc) {
       List<dynamic> docFields = [];
-      Map<String, dynamic> data = doc.data()!;
-      data.forEach((key, value) {
-        // Timestamp 값을 DateTime으로 변환하여 추가
-        if (value is Timestamp) {
-          DateTime dateTime = value.toDate();
-          String formattedDate = DateFormat('yyyy-MM-dd HH:mm').format(dateTime); // 포맷팅
-          docFields.add(formattedDate.substring(0, 16));
-        } else {
-          docFields.add(value);
-        }
-      });
+      // 필드 값을 timeStamp를 기준으로 정렬된 순서로 추가
+      docFields.add(doc['question']);
+      DateTime dateTime = doc['timeStamp'].toDate();
+              String formattedDate = DateFormat('yyyy-MM-dd HH:mm').format(dateTime); // 포맷팅
+      docFields.add(formattedDate.substring(0, 16));
+      // docFields.add(doc['timeStamp'].toDate().toString()); // Timestamp를 DateTime으로 변환하여 추가
+      docFields.add(doc['accidentSite']);
+      docFields.add(doc['coverageType']);
+      docFields.add(doc['accidentType']);
+      docFields.add(doc['description']);
       allDocumentFields.add(docFields);
     });
 
     return allDocumentFields;
   }
+
+  // Future<List<List<dynamic>>> getAccidentDetail(String uid) async {
+  //   List<List<dynamic>> allDocumentFields = [];
+  //
+  //   // Firestore에서 컬렉션 가져오기
+  //   QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
+  //       .collection('users')
+  //       .doc(uid)
+  //       .collection("myAccident")
+  //       .orderBy('timeStamp', descending: true)
+  //       .get();
+  //
+  //   // 컬렉션의 각 도큐먼트에서 전체 필드 값을 가져와서 리스트에 추가
+  //   querySnapshot.docs.forEach((doc) {
+  //     List<dynamic> docFields = [];
+  //     Map<String, dynamic> data = doc.data()!;
+  //     data.forEach((key, value) {
+  //       // Timestamp 값을 DateTime으로 변환하여 추가
+  //       print("key : $key, value : $value");
+  //       if (value is Timestamp) {
+  //         DateTime dateTime = value.toDate();
+  //         String formattedDate = DateFormat('yyyy-MM-dd HH:mm').format(dateTime); // 포맷팅
+  //         docFields.add(formattedDate.substring(0, 16));
+  //       } else {
+  //         docFields.add(value);
+  //       }
+  //     });
+  //     allDocumentFields.add(docFields);
+  //   });
+  //
+  //   return allDocumentFields;
+  // }
 }

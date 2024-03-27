@@ -12,13 +12,21 @@ import 'package:sadam/navi/bottom_navi.dart';
 import 'package:sadam/view/faq.dart';
 import 'package:sadam/view/accountNumber.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sadam/view/login.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class home extends StatelessWidget {
   Future<void> _logout(BuildContext context) async {
     try {
       await FirebaseAuth.instance.signOut();
       // 로그아웃 후 필요한 작업을 수행할 수 있습니다.
-      Navigator.of(context).popUntil((route) => route.isFirst);
+      // Navigator.of(context).popUntil((route) => route.isFirst);
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+              builder: (context) => login(),
+              settings: RouteSettings(name: '/')
+          )
+      );
       print(uidController.text);
     } catch (e) {
       print('Error logging out: $e');
@@ -30,6 +38,19 @@ class home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    Future<void> deleteUser(String uid) async {
+      try {
+        // 사용자 데이터 삭제
+        await FirebaseFirestore.instance.collection('users').doc(uid).delete();
+
+        // Firebase Authentication에서 사용자 삭제
+        await FirebaseAuth.instance.currentUser!.delete();
+
+        print('사용자와 관련된 데이터가 성공적으로 삭제되었습니다.');
+      } catch (e) {
+        print('사용자 및 관련 데이터 삭제 중 오류가 발생했습니다: $e');
+      }
+    }
     return Scaffold(
       appBar: AppBar(
         leadingWidth: 60,
@@ -74,7 +95,27 @@ class home extends StatelessWidget {
               onTap: (){
                 _logout(context);
               },
-            )
+            ),ListTile(
+              title: Text(
+                "회원 탈퇴",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'nanumRegular',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400
+                ),
+              ),
+              onTap: (){
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                        builder: (context) => login(),
+                        settings: RouteSettings(name: '/')
+                    )
+                );
+
+                deleteUser(uidController.text);
+              },
+            ),
           ],
         ),
       ),

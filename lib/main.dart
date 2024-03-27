@@ -1,6 +1,8 @@
+
 import 'package:flutter/material.dart';
 import 'package:sadam/provider/accidentList.dart';
 import 'package:sadam/provider/accident_detail.dart';
+import 'package:sadam/provider/cloud_message1.dart';
 import 'package:sadam/view/login.dart';
 import 'package:provider/provider.dart';
 import 'package:sadam/provider/ex.dart';
@@ -14,12 +16,29 @@ import 'package:sadam/view/home.dart';
 import 'package:sadam/view/login.dart';
 import 'package:sadam/controller/controller.dart';
 import 'package:sadam/provider/reple_list.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart' as kakaoAuth;
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  kakaoAuth.KakaoSdk.init(nativeAppKey: '406c39ba829f927c8dccf7794ee8a89e'); // 이 줄을 runApp 위에 추가한다.
+  final fcmToken = await FirebaseMessaging.instance.getToken();
+  fcmToken;
+  print("fcm토큰값 : $fcmToken");
+  FirebaseMessaging.instance.onTokenRefresh
+      .listen((fcmToken) {
+    // TODO: If necessary send token to application server.
+
+    // Note: This callback is fired at each app startup and whenever a new
+    // token is generated.
+  })
+      .onError((err) {
+    // Error getting token.
+  });
   runApp(const MyApp());
 }
 
@@ -44,6 +63,9 @@ class MyApp extends StatelessWidget {
           ),
           ChangeNotifierProvider(
             create: (context) => Reple(),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => messeage_1(),
           ),
         ],
       child: MaterialApp(
@@ -85,6 +107,10 @@ class CheckUserLoggedIn extends StatelessWidget {
   }
   @override
   Widget build(BuildContext context) {
+    final messageProvider = Provider.of<messeage_1>(context);
+
+    // 프로바이더를 초기화하고 메시지 수신을 시작
+    messageProvider.init();
     return FutureBuilder(
       future: FirebaseAuth.instance.authStateChanges().first,
       builder: (context, AsyncSnapshot<User?> snapshot) {
@@ -93,7 +119,13 @@ class CheckUserLoggedIn extends StatelessWidget {
         } else {
           if (snapshot.hasData) {
             String uid = snapshot.data!.uid;
+            String? name = snapshot.data!.displayName;
             uidController.text = uid;
+            userNameController.text = name ?? "이름없음";
+            print("uid : $uid");
+            print("name : $name");
+            print("uidController : ${uidController.text}");
+            print("userNameController : ${userNameController.text}");
             getSponsorId(uidController.text);
             print(uid);
             return home();

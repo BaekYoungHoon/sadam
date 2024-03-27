@@ -73,7 +73,7 @@ class addFeed extends StatelessWidget {
                         child: Padding(
                           padding: EdgeInsets.only(left: 20),
                           child: Text(
-                            "홍길동",
+                            userNameController.text,
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
